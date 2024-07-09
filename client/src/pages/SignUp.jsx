@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "../styles/style_for_login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [formdata, setFormdata] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  console.log(formdata);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormdata({ ...formdata, [e.target.id]: e.target.value });
@@ -30,7 +30,7 @@ export default function SignUp() {
         setError(true);
         return;
       }
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -70,6 +70,7 @@ export default function SignUp() {
             className="input-field"
             name="password"
             id="password"
+            placeholder="Password"
             onChange={handleChange}
             required
           />
@@ -80,7 +81,7 @@ export default function SignUp() {
         </div>
       </form>
       <div className="sign-up-link">
-        <p>Already have account? <Link to={"/"}><div className="move-link">Login</div></Link></p>
+        <p>Already have account? <Link to={"/"} className="move-link">Login</Link></p>
       </div>
     </div>
   )
