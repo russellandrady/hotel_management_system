@@ -3,6 +3,7 @@ import "../styles/style_for_login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formdata, setFormdata] = useState({});
@@ -70,6 +71,7 @@ export default function SignIn() {
           <button className="submit-btn" id="submit" type="submit"></button>
           <label>Sign In</label>
         </div>
+        
       </form>
       <div className="sign-up-link">
         <p>
@@ -79,6 +81,7 @@ export default function SignIn() {
           </Link>
         </p>
       </div>
+      <OAuth/>
     </div>
   );
 }

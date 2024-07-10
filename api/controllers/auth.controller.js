@@ -19,7 +19,7 @@ export const signup = async(req, res, next)=>{
 export const signin = async(req, res, next) => {
     const { email, password } = req.body;
     try {
-      const validUser = await User.findOne({ email }); //with findone we can find the first user with the email
+      const validUser = await User.findOne({ email }); 
       if (!validUser) {
         return next(errorHandler(404, "User not found"));
       }
@@ -27,7 +27,7 @@ export const signin = async(req, res, next) => {
       if (!validPassword) {
         return next(errorHandler(401, "Wrong credentials"));
       }
-      const { password: pass, ...rest } = validUser._doc; //we destructure the password from the user object and the rest. This _doc remove the unneccesary things
+      const { password: pass, ...rest } = validUser._doc; 
       const token = jwt.sign(
         { id: validUser._id, email: validUser.email },
         process.env.JWT_SECRET
@@ -40,4 +40,44 @@ export const signin = async(req, res, next) => {
     } catch (error) {
       next(error);
     }
+}
+
+export const google = async (req, res, next)=>{
+  try {
+    const user = await User.findOne({email:req.body.email});
+    if(user){
+      const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_SECRET
+      );
+      const { password: pass, ...rest } = user._doc;
+      let expiryDate = new Date(Date.now() + 60 * 60 * 3000);
+      res
+        .cookie("access_token", token, { httpOnly: true, expires: expiryDate})
+        .status(200)
+        .json(rest); 
+    }
+    else{
+      const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+      const hashedpassword = bcryptjs.hashSync(generatedPassword, 10);
+      const newUser = new User({
+        username: req.body.name,
+        email:req.body.email,
+        password: hashedpassword
+      });
+      await newUser.save();
+      const token = jwt.sign(
+        { id: newUser._id, email: newUser.email },
+        process.env.JWT_SECRET
+      );
+      const { password: pass, ...rest } = user._doc;
+      let expiryDate = new Date(Date.now() + 60 * 60 * 3000);
+      res
+        .cookie("access_token", token, { httpOnly: true, expires: expiryDate})
+        .status(200)
+        .json(rest); 
+    }
+  } catch (error) {
+    
+  }
 }
