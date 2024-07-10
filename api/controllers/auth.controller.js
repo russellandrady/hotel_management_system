@@ -36,7 +36,7 @@ export const signin = async(req, res, next) => {
       res
         .cookie("access_token", token, { httpOnly: true, expires: expiryDate})
         .status(200)
-        .json(rest); //we create a cookie named access_token with the token in client's browser that can only access by http. Not by third party apps. And finally we send the validUser credentials to the client
+        .json(rest); 
     } catch (error) {
       next(error);
     }
