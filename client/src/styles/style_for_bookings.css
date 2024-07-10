@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+body {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .table-container {
+    width: 1000px;
+    margin: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  th, td {
+    padding: 8px;
+    color: black;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  th {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #f9f8f8;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
+  
+  tbody tr:hover {
+    opacity: 0.6;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .add-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 24px;
+    color: #000000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; 
+    z-index: 5;
+  }
+  
+  .add-button:hover {
+    background-color: #000000;
+    color: white;
+  }
+  .container-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #f9f8f8;
+    position: relative; 
+  }
+  
+  .container-add::before {
+    content: '';
+    position: absolute;
+    top: 50%; 
+    left: 30px; 
+    right: 30px; 
+    height: 1px; 
+    background-color: #ccc; 
+  }
+  
+  .container-add-content {
+    z-index: 1; 
+  }
+  
+  
