@@ -17,6 +17,7 @@ import {
   bookingDeleteFailure,
   bookingDeleteStart,
   bookingDeleteSuccess,
+  signOut,
 } from "../redux/user/userSlice";
 
 export default function Bookings() {
@@ -134,6 +135,16 @@ export default function Bookings() {
       });
     } catch (error) {
       bookingDeleteFailure(error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/signout");
+      dispatch(signOut());
+      navigate("/");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -348,6 +359,11 @@ export default function Bookings() {
           </form>
         </div>
       </Modal>
+      <div className="sign-out-link">
+        <p onClick={handleSignOut}>
+          Signout
+        </p>
+      </div>
     </div>
   );
 }

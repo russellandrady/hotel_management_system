@@ -69,6 +69,12 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       },
+      signOut(state) {
+        state.currentUser = null;
+        state.bookings = [];
+        state.loading = false;
+        state.error = false;
+      },
     },
   });
   export const {
@@ -86,6 +92,7 @@ const userSlice = createSlice({
     bookingDeleteStart,
     bookingDeleteSuccess,
     bookingDeleteFailure,
+    signOut
   } = userSlice.actions;
   export default userSlice.reducer;
   

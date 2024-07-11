@@ -200,6 +200,14 @@ body {
 .date-picker-container label {
   font-weight: 500;
 }
-.hidden {
-  display: none;
+.sign-out-link{
+  text-align: center;
+  font-size: 15px;
+  margin-top: 20px;
+  color: #000;
+  font-weight: 600;
+}
+.sign-out-link:hover{
+  text-decoration: underline;
+  cursor: pointer;
 }
