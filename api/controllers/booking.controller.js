@@ -12,3 +12,14 @@ export const createBooking = async (req, res, next) => {
         console.log(err);
     }
 };
+export const getAllBookings = async (req, res, next) => {
+    try{
+        const bookings = await Booking.find({ user: req.user.id });
+        console.log(bookings);
+        res.status(203).json(bookings);
+
+    }
+    catch(err){
+        next(err);
+    }
+};

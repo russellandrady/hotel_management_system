@@ -2,19 +2,21 @@ import { useDispatch, useSelector } from "react-redux";
 import "../styles/style_for_bookings.css";
 import { HiOutlineSquaresPlus } from "react-icons/hi2";
 import Modal from "react-modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   bookingSubmitStart,
   bookingSubmitSuccess,
   bookingSubmitFailure,
+  bookingGotAll,
+  bookingGotAllFailure,
 } from "../redux/user/userSlice";
 
 export default function Bookings() {
   const dispatch = useDispatch();
 
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, bookings } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
 
   const [checkinDate, setCheckinDate] = useState(new Date());
@@ -60,7 +62,7 @@ export default function Bookings() {
         return;
       }
       dispatch(bookingSubmitSuccess());
-      // fetchData();
+      fetchData();
       setIsOpen(false);
       setFormdata({});
       setFormdata({
@@ -71,6 +73,26 @@ export default function Bookings() {
       dispatch(bookingSubmitFailure(error));
     }
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/booking/all");
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(bookingGotAll(data));
+      } else {
+        dispatch(bookingGotAllFailure("Failed to fetch data"));
+      }
+    } catch (error) {
+      dispatch(bookingGotAllFailure(error));
+    }
+  };
+  useEffect(() => {
+    if (bookings.length === 0) {
+      fetchData();
+    }
+  }, []);
+  console.log(bookings);
 
   Modal.setAppElement("#root");
   return (
@@ -99,33 +121,17 @@ export default function Bookings() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Grand Plaza</td>
-              <td>123 Main St</td>
-              <td>101</td>
-              <td>2024-07-15</td>
-              <td>2024-07-20</td>
-              <td>2</td>
-              <td>2000</td>
-            </tr>
-            <tr>
-              <td>Sunset Resort</td>
-              <td>456 Beach Ave</td>
-              <td>205</td>
-              <td>2024-08-01</td>
-              <td>2024-08-07</td>
-              <td>4</td>
-              <td>1000</td>
-            </tr>
-            <tr>
-              <td>Mountain Lodge</td>
-              <td>789 Hill Rd</td>
-              <td>303</td>
-              <td>2024-09-10</td>
-              <td>2024-09-15</td>
-              <td>3</td>
-              <td>10000</td>
-            </tr>
+            {(Array.isArray(bookings) ? bookings : []).map((booking) => (
+              <tr key={booking._id}>
+                <td>{booking.bookingname}</td>
+                <td>{booking.address}</td>
+                <td>{booking.roomnumber}</td>
+                <td>{new Date(booking.checkin).toLocaleDateString()}</td>
+                <td>{new Date(booking.checkout).toLocaleDateString()}</td>
+                <td>{booking.noofguests}</td>
+                <td>{booking.price}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

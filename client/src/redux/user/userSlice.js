@@ -39,6 +39,12 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       },
+      bookingGotAll(state, action) {
+        state.bookings = action.payload;
+      },
+      bookingGotAllFailure(state, action) {
+        state.error = action.payload;
+      },
     },
   });
   export const {
@@ -48,6 +54,8 @@ const userSlice = createSlice({
     bookingSubmitStart,
     bookingSubmitSuccess,
     bookingSubmitFailure,
+    bookingGotAll,
+    bookingGotAllFailure
   } = userSlice.actions;
   export default userSlice.reducer;
   
