@@ -16,7 +16,7 @@ const userSlice = createSlice({
         state.error = false;
       },
       signInSuccess: (state, action) => {
-        state.currentUser = action.payload; //payload may contain the user data. After successful login you can see in the redux on the browser, how payload is looks like.
+        state.currentUser = action.payload; 
         state.loading = false;
         state.error = false;
       },
@@ -28,12 +28,26 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = false;
       },
+      bookingSubmitStart(state) {
+        state.loading = true;
+        state.error = false;
+      },
+      bookingSubmitSuccess(state) {
+        state.loading = false;
+      },
+      bookingSubmitFailure(state, action) {
+        state.loading = false;
+        state.error = action.payload;
+      },
     },
   });
   export const {
     signInStart,
     signInSuccess,
     signInFailure,
+    bookingSubmitStart,
+    bookingSubmitSuccess,
+    bookingSubmitFailure,
   } = userSlice.actions;
   export default userSlice.reducer;
   
