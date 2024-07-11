@@ -5,6 +5,9 @@ import Modal from "react-modal";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import {
   bookingSubmitStart,
   bookingSubmitSuccess,
@@ -19,11 +22,12 @@ import {
   bookingDeleteSuccess,
   signOut,
 } from "../redux/user/userSlice";
+import { Navigate } from "react-router-dom";
 
 export default function Bookings() {
   const dispatch = useDispatch();
 
-  const { currentUser, bookings } = useSelector((state) => state.user);
+  const { currentUser, bookings, loading } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const [modalMode, setmodalMode] = useState();
   const [selectedBooking, setselectedBooking] = useState([]);
@@ -68,9 +72,11 @@ export default function Bookings() {
 
       if (data.success === false) {
         dispatch(bookingSubmitFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(bookingSubmitSuccess());
+      toast.error("Added");
       fetchData();
       setIsOpen(false);
       setFormdata({});
@@ -80,7 +86,7 @@ export default function Bookings() {
       });
     } catch (error) {
       dispatch(bookingSubmitFailure(error));
-      console.log(error);
+      toast.error(error);
     }
   };
 
@@ -98,9 +104,11 @@ export default function Bookings() {
       const data = await res.json();
       if (data.success == false) {
         dispatch(bookingUpdateFailure(data.message));
+        toast.error(data.message);
         return;
       }
       dispatch(bookingUpdateSuccess());
+      toast.error("Updated");
       fetchData();
       setIsOpen(false);
       setFormdata({});
@@ -110,6 +118,7 @@ export default function Bookings() {
       });
     } catch (error) {
       bookingUpdateFailure(error);
+      toast.error(error);
     }
   };
   const handleDelete = async () => {
@@ -122,10 +131,12 @@ export default function Bookings() {
       const data = await res.json();
       if (data.success == false) {
         dispatch(bookingDeleteFailure(data.message));
+        toast.error(data.message);
         return;
       }
 
       dispatch(bookingDeleteSuccess());
+      toast.error("Deleted");
       fetchData();
       setIsOpen(false);
       setFormdata({});
@@ -135,6 +146,7 @@ export default function Bookings() {
       });
     } catch (error) {
       bookingDeleteFailure(error);
+      toast.error(error);
     }
   };
 
@@ -142,9 +154,9 @@ export default function Bookings() {
     try {
       await fetch("/api/auth/signout");
       dispatch(signOut());
-      navigate("/");
+      Navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   };
 
@@ -156,9 +168,11 @@ export default function Bookings() {
         dispatch(bookingGotAll(data));
       } else {
         dispatch(bookingGotAllFailure("Failed to fetch data"));
+        toast.error("Failed to fetch data");
       }
     } catch (error) {
       dispatch(bookingGotAllFailure(error));
+      toast.error(error);
     }
   };
   useEffect(() => {
@@ -166,7 +180,6 @@ export default function Bookings() {
       fetchData();
     }
   }, []);
-  console.log(formdata);
 
   Modal.setAppElement("#root");
   return (
@@ -352,9 +365,9 @@ export default function Bookings() {
               required
             />
             <br />
-            <input type="submit" value={modalMode} />
+            <input type="submit" value={modalMode} disabled={loading} />
             {modalMode !== "Add" ? (
-              <input type="button" className="delete-button" value="Delete" onClick={handleDelete}/>
+              <input type="button" className="delete-button" value="Delete" onClick={handleDelete} disabled={loading}/>
             ) : null}
           </form>
         </div>
@@ -364,6 +377,11 @@ export default function Bookings() {
           Signout
         </p>
       </div>
+      {loading && (
+        <div className="loading-icon">
+          <AiOutlineLoading3Quarters className="icon" />
+        </div>
+      )}
     </div>
   );
 }

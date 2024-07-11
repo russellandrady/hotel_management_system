@@ -1,21 +1,29 @@
 import { useState } from "react";
 import "../styles/style_for_login.css";
 import { Link, useNavigate } from "react-router-dom";
+import {toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signUpFailure,
+  signUpStart,
+  signUpSuccess,
+} from "../redux/user/userSlice";
 
 export default function SignUp() {
   const [formdata, setFormdata] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { error, loading } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormdata({ ...formdata, [e.target.id]: e.target.value });
   };
   const handleSubmit = async (e) => {
     try {
-      setLoading(true);
-      setError(false);
+      dispatch(signUpStart());
       e.preventDefault();
       const response = await fetch("/api/auth/signup", {
         method: "POST",
@@ -25,15 +33,18 @@ export default function SignUp() {
         body: JSON.stringify(formdata),
       });
       const data = await response.json();
-      setLoading(false);
       if (data.success === false) {
-        setError(true);
+        dispatch(signUpFailure(data.message));
+        toast.error(data.message);
         return;
       }
+      dispatch(signUpSuccess());
+      toast.error("Successfully Registered");
       navigate("/");
     } catch (error) {
-      setLoading(false);
-      setError(true);
+      dispatch(signUpFailure(data));
+      console.log(error);
+      toast.error(error);
     }
   };
   return (
@@ -76,13 +87,23 @@ export default function SignUp() {
           />
         </div>
         <div className="input-submit">
-          <button className="submit-btn" id="submit" type="submit"></button>
+          <button className="submit-btn" id="submit" type="submit"  disabled={loading}></button>
           <label>Register</label>
         </div>
       </form>
       <div className="sign-up-link">
-        <p>Already have account? <Link to={"/"} className="move-link">Login</Link></p>
+        <p>
+          Already have account?{" "}
+          <Link to={"/"} className="move-link">
+            Login
+          </Link>
+        </p>
       </div>
+      {loading && (
+        <div className="loading-icon">
+          <AiOutlineLoading3Quarters className="icon" />
+        </div>
+      )}
     </div>
-  )
+  );
 }

@@ -16,7 +16,7 @@ body{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    width: 440px;
+    max-width: 440px;
     height: 480px;
     padding: 30px;
 }
@@ -71,6 +71,9 @@ section .move-link{
     border-radius: 25px;
     cursor: pointer;
 }
+.submit-btn[disabled]{
+    cursor: default;
+}
 .input-submit label{
     position: absolute;
     top: 45%;
@@ -83,6 +86,9 @@ section .move-link{
 }
 .submit-btn:hover{
     background: #000;
+}
+.submit-btn[disabled]:hover{
+    background: #222;
 }
 .sign-up-link{
     text-align: center;

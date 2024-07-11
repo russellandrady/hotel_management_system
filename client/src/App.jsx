@@ -3,10 +3,19 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Bookings from "./pages/Bookings";
 import PrivateRoute from "./components/PrivateRoute";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+  const toastStyle = {
+    borderRadius: '8px',
+    boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
+    top: '5px', 
+  };
   return (
     <BrowserRouter>
+    <ToastContainer toastStyle={toastStyle} position="top-center" // Position the ToastContainer at the top-center of the screen
+        autoClose={2500}/>
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />

@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import {toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function SignIn() {
   const [formdata, setFormdata] = useState({});
@@ -31,12 +34,14 @@ export default function SignIn() {
 
       if (data.success === false) {
         dispatch(signInFailure(data));
+        toast.error(data.message);
         return;
       }
       dispatch(signInSuccess(data));
       navigate("/bookings");
     } catch (error) {
       dispatch(signInFailure(error));
+      toast.error(error);
     }
   };
   return (
@@ -68,7 +73,7 @@ export default function SignIn() {
           />
         </div>
         <div className="input-submit">
-          <button className="submit-btn" id="submit" type="submit"></button>
+          <button className="submit-btn" id="submit" type="submit"  disabled={loading}></button>
           <label>Sign In</label>
         </div>
         
@@ -82,6 +87,11 @@ export default function SignIn() {
         </p>
       </div>
       <OAuth/>
+      {loading && (
+        <div className="loading-icon">
+          <AiOutlineLoading3Quarters className="icon" />
+        </div>
+      )}
     </div>
   );
 }

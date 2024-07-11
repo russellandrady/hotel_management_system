@@ -28,6 +28,18 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = false;
       },
+      signUpStart: (state) => {
+        state.loading = true;
+        state.error = false;
+      },
+      signUpSuccess: (state) => { 
+        state.loading = false;
+        state.error = false;
+      },
+      signUpFailure: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      },
       bookingSubmitStart(state) {
         state.loading = true;
         state.error = false;
@@ -81,6 +93,9 @@ const userSlice = createSlice({
     signInStart,
     signInSuccess,
     signInFailure,
+    signUpStart,
+    signUpSuccess,
+    signUpFailure,
     bookingSubmitStart,
     bookingSubmitSuccess,
     bookingSubmitFailure,

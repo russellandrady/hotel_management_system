@@ -167,6 +167,15 @@ body {
 .modal-content input[type="submit"]:hover {
   background-color: #000;
 }
+.delete-button[disabled],input[type="submit"]{
+  cursor: default;
+}
+.delete-button[disabled]:hover{
+  background: #a84e4e;
+}
+input[type="submit"]{
+  background-color: #222;
+}
 .delete-button:hover {
   background-color: #9a4b4b;
 }
