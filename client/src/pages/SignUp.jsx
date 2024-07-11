@@ -39,7 +39,7 @@ export default function SignUp() {
         return;
       }
       dispatch(signUpSuccess());
-      toast.error("Successfully Registered");
+      toast.success("Successfully Registered");
       navigate("/");
     } catch (error) {
       dispatch(signUpFailure(data));

@@ -76,7 +76,7 @@ export default function Bookings() {
         return;
       }
       dispatch(bookingSubmitSuccess());
-      toast.error("Added");
+      toast.success("Added");
       fetchData();
       setIsOpen(false);
       setFormdata({});
@@ -108,7 +108,7 @@ export default function Bookings() {
         return;
       }
       dispatch(bookingUpdateSuccess());
-      toast.error("Updated");
+      toast.success("Updated");
       fetchData();
       setIsOpen(false);
       setFormdata({});
@@ -136,7 +136,7 @@ export default function Bookings() {
       }
 
       dispatch(bookingDeleteSuccess());
-      toast.error("Deleted");
+      toast.success("Deleted");
       fetchData();
       setIsOpen(false);
       setFormdata({});
