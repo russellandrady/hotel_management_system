@@ -126,8 +126,7 @@ body {
   font-weight: 500;
 }
 
-.modal-content input,
-.modal-content input[type="submit"] {
+.modal-content input[type="text"],.modal-content input[type="number"]{
   padding: 10px;
   font-size: 16px;
   border: 2px solid #ddd;
@@ -136,16 +135,40 @@ body {
   outline: none;
   text-align: center;
 }
+.delete-button {
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 15px;
+  margin-bottom: 0px;
+  outline: none;
+  text-align: center;
+}
 
 .modal-content input[type="submit"] {
+  padding: 10px;
+  font-size: 16px;
   border: none;
+  border-radius: 15px;
   background-color: #222;
+  margin-bottom: 0px;
   color: white;
   cursor: pointer;
+  text-align: center;
+}
+.delete-button {
+  border: none;
+  background-color: #a84e4e;
+  color: white;
+  cursor: pointer;
+  margin-top: 5px;
 }
 
 .modal-content input[type="submit"]:hover {
   background-color: #000;
+}
+.delete-button:hover {
+  background-color: #9a4b4b;
 }
 
 .close {
@@ -176,4 +199,7 @@ body {
 
 .date-picker-container label {
   font-weight: 500;
+}
+.hidden {
+  display: none;
 }

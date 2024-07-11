@@ -11,6 +11,12 @@ import {
   bookingSubmitFailure,
   bookingGotAll,
   bookingGotAllFailure,
+  bookingUpdateStart,
+  bookingUpdateFailure,
+  bookingUpdateSuccess,
+  bookingDeleteFailure,
+  bookingDeleteStart,
+  bookingDeleteSuccess,
 } from "../redux/user/userSlice";
 
 export default function Bookings() {
@@ -18,6 +24,8 @@ export default function Bookings() {
 
   const { currentUser, bookings } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
+  const [modalMode, setmodalMode] = useState();
+  const [selectedBooking, setselectedBooking] = useState([]);
 
   const [checkinDate, setCheckinDate] = useState(new Date());
   const [checkoutDate, setCheckoutDate] = useState(new Date());
@@ -71,6 +79,61 @@ export default function Bookings() {
       });
     } catch (error) {
       dispatch(bookingSubmitFailure(error));
+      console.log(error);
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(bookingUpdateStart());
+      const res = await fetch(`/api/booking/update/${selectedBooking._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formdata),
+      });
+      const data = await res.json();
+      if (data.success == false) {
+        dispatch(bookingUpdateFailure(data.message));
+        return;
+      }
+      dispatch(bookingUpdateSuccess());
+      fetchData();
+      setIsOpen(false);
+      setFormdata({});
+      setFormdata({
+        checkin: setToMidnight(checkinDate),
+        checkout: setToMidnight(checkoutDate),
+      });
+    } catch (error) {
+      bookingUpdateFailure(error);
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      dispatch(bookingDeleteStart());
+      const res = await fetch(`/api/booking/delete/${selectedBooking._id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      if (data.success == false) {
+        dispatch(bookingDeleteFailure(data.message));
+        return;
+      }
+
+      dispatch(bookingDeleteSuccess());
+      fetchData();
+      setIsOpen(false);
+      setFormdata({});
+      setFormdata({
+        checkin: setToMidnight(checkinDate),
+        checkout: setToMidnight(checkoutDate),
+      });
+    } catch (error) {
+      bookingDeleteFailure(error);
     }
   };
 
@@ -92,7 +155,7 @@ export default function Bookings() {
       fetchData();
     }
   }, []);
-  console.log(bookings);
+  console.log(formdata);
 
   Modal.setAppElement("#root");
   return (
@@ -102,6 +165,13 @@ export default function Bookings() {
           className="add-button"
           onClick={() => {
             setIsOpen(true);
+            setmodalMode("Add");
+            setselectedBooking([]);
+            setFormdata({});
+            setFormdata({
+              checkin: setToMidnight(checkinDate),
+              checkout: setToMidnight(checkoutDate),
+            });
           }}
         >
           <HiOutlineSquaresPlus />
@@ -122,7 +192,29 @@ export default function Bookings() {
           </thead>
           <tbody>
             {(Array.isArray(bookings) ? bookings : []).map((booking) => (
-              <tr key={booking._id}>
+              <tr
+                key={booking._id}
+                onClick={() => {
+                  setIsOpen(true);
+                  setmodalMode("Update");
+                  setselectedBooking(booking);
+                  setCheckinDate(
+                    new Date(booking.checkin).toLocaleDateString()
+                  );
+                  setCheckoutDate(
+                    new Date(booking.checkout).toLocaleDateString()
+                  );
+                  setFormdata({
+                    bookingname: booking.bookingname,
+                    address: booking.address,
+                    roomnumber: booking.roomnumber,
+                    checkin: booking.checkin,
+                    checkout: booking.checkout,
+                    noofguests: booking.noofguests,
+                    price: booking.price,
+                  });
+                }}
+              >
                 <td>{booking.bookingname}</td>
                 <td>{booking.address}</td>
                 <td>{booking.roomnumber}</td>
@@ -153,7 +245,10 @@ export default function Bookings() {
           >
             &times;
           </span>
-          <form id="editForm" onSubmit={handleSubmit}>
+          <form
+            id="editForm"
+            onSubmit={modalMode === "Add" ? handleSubmit : handleUpdate}
+          >
             <label htmlFor="bookingname">Hotel Name</label>
             <br />
             <input
@@ -161,6 +256,9 @@ export default function Bookings() {
               id="bookingname"
               name="bookingname"
               onChange={handleChange}
+              defaultValue={
+                selectedBooking.length !== 0 ? selectedBooking.bookingname : ""
+              }
               required
             />
             <br />
@@ -171,6 +269,9 @@ export default function Bookings() {
               id="address"
               name="address"
               onChange={handleChange}
+              defaultValue={
+                selectedBooking.length !== 0 ? selectedBooking.address : ""
+              }
               required
             />
             <br />
@@ -181,6 +282,9 @@ export default function Bookings() {
               id="roomnumber"
               name="roomnumber"
               onChange={handleChange}
+              defaultValue={
+                selectedBooking.length !== 0 ? selectedBooking.roomnumber : ""
+              }
               required
             />
             <br />
@@ -204,6 +308,7 @@ export default function Bookings() {
                   selected={checkoutDate}
                   onChange={handleCheckoutChange}
                   required
+                  minDate={checkinDate}
                   id="checkout"
                   name="checkout"
                 />
@@ -217,6 +322,9 @@ export default function Bookings() {
               id="noofguests"
               name="noofguests"
               onChange={handleChange}
+              defaultValue={
+                selectedBooking.length !== 0 ? selectedBooking.noofguests : ""
+              }
               required
             />
             <br />
@@ -227,10 +335,16 @@ export default function Bookings() {
               id="price"
               name="price"
               onChange={handleChange}
+              defaultValue={
+                selectedBooking.length !== 0 ? selectedBooking.price : ""
+              }
               required
             />
             <br />
-            <input type="submit" value="Add" />
+            <input type="submit" value={modalMode} />
+            {modalMode !== "Add" ? (
+              <input type="button" className="delete-button" value="Delete" onClick={handleDelete}/>
+            ) : null}
           </form>
         </div>
       </Modal>
