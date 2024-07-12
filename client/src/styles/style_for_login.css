@@ -76,6 +76,7 @@ section .move-link{
 }
 .input-submit label{
     position: absolute;
+    font-size: 15px;
     top: 45%;
     left: 50%;
     color: #fff;
@@ -98,38 +99,6 @@ section .move-link{
 .sign-up-link .move-link{
     color: #000;
     font-weight: 600;
-}
-.flash {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    text-align: center;
-}
-.flash {
-    position: fixed;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px;
-    width: 300px;
-    text-align: center;
-    border-radius: 10px;
-    z-index: 1000;
-    opacity: 0.7;
-}
-.flash-success {
-    background-color: #84df87;
-    color: white;
-}
-.flash-error {
-    background-color: #eb837c;
-    color: white;
-}
-.flash-close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    cursor: pointer;
 }
 .google-button {
     display: flex;

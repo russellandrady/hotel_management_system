@@ -73,8 +73,8 @@ export default function SignIn() {
           />
         </div>
         <div className="input-submit">
-          <button className="submit-btn" id="submit" type="submit"  disabled={loading}></button>
-          <label>Sign In</label>
+          <button className="submit-btn" id="submit" type="submit"  disabled={loading}><label>Sign In</label></button>
+          
         </div>
         
       </form>

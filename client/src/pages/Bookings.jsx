@@ -245,7 +245,7 @@ export default function Bookings() {
                 <td>{new Date(booking.checkin).toLocaleDateString()}</td>
                 <td>{new Date(booking.checkout).toLocaleDateString()}</td>
                 <td>{booking.noofguests}</td>
-                <td>{booking.price}</td>
+                <td>{"$"+booking.price}</td>
               </tr>
             ))}
           </tbody>
@@ -352,7 +352,7 @@ export default function Bookings() {
               required
             />
             <br />
-            <label htmlFor="price">Price</label>
+            <label htmlFor="price">Price ($)</label>
             <br />
             <input
               type="number"

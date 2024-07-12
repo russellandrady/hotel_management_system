@@ -9,7 +9,7 @@ body {
   }
   
   .table-container {
-    width: 1000px;
+    width: 100%;
     margin: auto;
   }
   
@@ -71,6 +71,7 @@ body {
     align-items: center;
     margin-top: 20px;
     height: 50px;
+    width: 100%;
     border-radius: 25px;
     background-color: #f9f8f8;
     position: relative; 
@@ -130,10 +131,14 @@ body {
   padding: 10px;
   font-size: 16px;
   border: 2px solid #ddd;
+
   border-radius: 15px;
   margin-bottom: 0px;
   outline: none;
   text-align: center;
+}
+.modal-content input[name="checkin"],.modal-content input[name="checkout"]{
+  max-width: 250px;
 }
 .delete-button {
   padding: 10px;

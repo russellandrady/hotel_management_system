@@ -87,8 +87,8 @@ export default function SignUp() {
           />
         </div>
         <div className="input-submit">
-          <button className="submit-btn" id="submit" type="submit"  disabled={loading}></button>
-          <label>Register</label>
+          <button className="submit-btn" id="submit" type="submit"  disabled={loading}><label>Register</label></button>
+          
         </div>
       </form>
       <div className="sign-up-link">
